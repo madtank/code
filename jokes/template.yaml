@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+
+  apiurl:
+    Type: String
+    Description: apiurl for jokes
+    Default: "https://official-joke-api.appspot.com/jokes/random"
+
+
+Resources:
+  MyAPIJokeGettingLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Policies: 
+        - AWSLambdaDynamoDBExecutionRole
+        - AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          apiurl: !Ref apiurl
+          TABLE_NAME: !Select [1, !Split ['/', !GetAtt StoringMyJokesDDB.Arn]]
+
+  StoringMyJokesDDB:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: id
+          AttributeType: N
+      KeySchema: 
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE

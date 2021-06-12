@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "samapp061121"
+s3_bucket = "samapp061121"
+s3_prefix = "samapp061121"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

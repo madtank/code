@@ -1,4 +1,5 @@
 import boto3
+import json
 
 client = boto3.client('sqs',region_name='us-east-2')
 
@@ -14,8 +15,16 @@ if 'QueueUrls' in q_urls:
       'Policy',
     ]
     )
-    
-    
-    print(q_attributes['Attributes']['Policy'])
 
 
+    print(q_attributes)
+    y = json.loads(q_attributes['Attributes']['Policy'])
+    for x in y['Statement']:
+      print(x)
+    
+
+'''working code
+    y = json.loads(q_attributes['Attributes']['Policy'])
+    for attr, rule in y['Statement'][0].items():
+      print(str(attr) + ',' + str(rule))
+    '''

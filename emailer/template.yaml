@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Emailer
+  deploy SAM app from scratch with my lambda
+
+Resources:
+  EmailApplication:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Policies:
+      - AWSLambdaExecute
+      - AWSLambdaSQSQueueExecutionRole
+      - Statement:
+        - Sid: SendSES
+          Effect: Allow
+          Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+          Resource: '*'

@@ -4,3 +4,4 @@ emailer/.aws-sam
 jokes/.aws-sam
 user_event/.aws-sam
 user_event/testapi.py
+.vscode/launch.json

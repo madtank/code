@@ -1,0 +1,37 @@
+{
+   "Records":[
+      {
+         "eventID":"bc95fa790d930238287bac1caf2606c5",
+         "eventName":"MODIFY",
+         "eventVersion":"1.1",
+         "eventSource":"aws:dynamodb",
+         "awsRegion":"us-east-1",
+         "dynamodb":{
+            "ApproximateCreationDateTime":1623544968.0,
+            "Keys":{
+               "id":{
+                  "S":"User_Event11-charles.morris@reqres.in"
+               }
+            },
+            "NewImage":{
+               "last_name":{
+                  "S":"Morris"
+               },
+               "first_name":{
+                  "S":"CharlesUpdate"
+               },
+               "id":{
+                  "S":"User_Event11-charles.morris@reqres.in"
+               },
+               "email":{
+                  "S":"charles.morris@reqres.in"
+               }
+            },
+            "SequenceNumber":"9100000000102990935467",
+            "SizeBytes":139,
+            "StreamViewType":"NEW_IMAGE"
+         },
+         "eventSourceARN":"arn:aws:dynamodb:us-east-1:914855332693:table/samapp061221-EventsDDB-QBRW4CF3J0KB/stream/2021-06-12T23:23:50.702"
+      }
+   ]
+}

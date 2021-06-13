@@ -1,4 +1,4 @@
-This is a sam app using lambda that makes calls to a random jokes api then writes the random joke to a dynamodb table.
+This is a sam app using lambda that makes calls to a user api then writes the user data to a dynamodb table. Second function uses dynamodb streams to process the event.
 
 You will first need to create a bucket
 aws s3 mb s3://mybucketname

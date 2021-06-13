@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+
+  apiurl:
+    Type: String
+    Description: apiurl for user data
+    Default: "https://reqres.in/api/users"
+
+Resources:
+  UserEventsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: EventsAPI
+      Handler: getevents.lambda_handler
+      Runtime: python3.8
+      Policies: 
+        - AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          apiurl: !Ref apiurl
+          TABLE_NAME: !Select [1, !Split ['/', !GetAtt EventsDDB.Arn]]
+
+  ProcessEventsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: EventsProcess
+      Handler: process.lambda_handler
+      Runtime: python3.8
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          TABLE_NAME: !Select [1, !Split ['/', !GetAtt EventsDDB.Arn]]
+      Events:
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt EventsDDB.StreamArn
+            BatchSize: 100
+            StartingPosition: TRIM_HORIZON
+
+  EventsDDB:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: id
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE

@@ -11,26 +11,26 @@ logger.setLevel(logging.INFO)
 
 ddbtable = os.environ['TABLE_NAME']
 apiurl = os.environ['apiurl']
-campaign_name = 'User_Event3'
 
 #Make an api call to get the data we want
 def lambda_handler(event, context):
+  campaign_name = event['campaign_name']
   response = requests.get(apiurl)
   response_data = json.loads(response.text)
   user_events = response_data['data']
-  updatedb(user_events)
+  updatedb(user_events,campaign_name)
 
 #Add the data to the datbase
-def updatedb(user_events):
+def updatedb(user_events,campaign_name):
   dynamodb = boto3.resource('dynamodb')
   table = dynamodb.Table(ddbtable)
   for user_event in user_events:
     email = user_event['email']
-    id = campaign_name + '-' + email
+    # id = campaign_name + '-' + email
     response = table.put_item(
       Item={
-          'id': id,
           'email': user_event['email'],
+          'campaign_name': campaign_name,
           'first_name': user_event['first_name'],
           'last_name': user_event['last_name']
       }
